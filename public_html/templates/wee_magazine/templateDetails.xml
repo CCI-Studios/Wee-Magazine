@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 1.6//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/1.6/template-install.dtd">
+<extension version="1.7" type="template" client="site">
+	<name>wee_magazine</name>
+	<creationDate>August 31, 2011</creationDate>
+	<author>Jonathan Bennett</author>
+	<authorEmail>jbennett@ccistudios.com</authorEmail>
+	<authorUrl>http://ccistudios.com</authorUrl>
+	<copyright>Copyright (C) 2011 Wee Magazine.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<version>1.7.0</version>
+	<description></description>
+
+	<files>
+		<folder>css</folder>
+		<folder>html</folder>
+		<folder>images</folder>
+		<folder>scripts</folder>
+		<filename>index.php</filename>
+		<filename>templateDetails.xml</filename>
+		<filename>component.php</filename>
+	</files>
+
+	<positions>
+		<position>header</position>
+		<position>footer</position>
+		<position>sidebar</position>
+	</positions>
+</extension>
