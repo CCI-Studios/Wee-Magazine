@@ -11,3 +11,11 @@ img.shadowed {
 	
 	behavior: url(templates/wee_magazine/css/PIE.htc);
 }
+
+.important {
+	color: #ab95ba;
+}
+
+.blue {
+	color: #93b1ce;
+}
