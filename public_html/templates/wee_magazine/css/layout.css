@@ -1,0 +1,68 @@
+.container {
+	width: 940px;
+	padding: 0 10px;
+	margin: 0 auto;
+	
+	position: relative;
+}
+
+#wrapper { 
+	min-height: 100%; 
+	position: relative;
+	
+	background: url(../images/body_bg.png) center 270px no-repeat;
+}
+
+#mainheader {
+	background: black;
+}
+
+.floral {
+	height: 51px;
+	width: 100%;
+	position: relative;
+	z-index: 2;
+
+	background: white url(../images/floral.jpg) repeat-x;
+	box-shadow: 0 0 10px black;
+	
+	behavior: url(templates/wee_magazine/css/PIE.htc);
+}
+.floral.dummy { 
+	background: none; 
+	box-shadow: none;
+}
+.floral.last { 
+	position: absolute;
+	bottom: 0;
+	
+	box-shadow: 0 0 10px black;
+}
+
+#body { background: url(../images/silhouette.png) bottom no-repeat; }
+#body .container { padding: 30px 0 10px; }
+
+#component {
+	width: 560px;
+	float: left;
+}
+#component.wide { width: 100%; }
+
+#sidebar {
+	width: 300px;
+	margin-left: 80px;
+	padding-bottom: 180px;
+	float: left;
+}
+
+#bottom { 
+	clear: both;
+}
+
+#copyright {
+	padding-top: 10px;
+	border-top: 1px solid #e9e9e9;
+
+	color: #ad9db8;
+	font-size: 12px;
+}
