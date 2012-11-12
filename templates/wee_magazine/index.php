@@ -18,7 +18,7 @@ if ($menu && $menu->getActive()) {
 
   <script type="text/javascript" src="http://use.typekit.com/myb8uhi.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-  
+
   <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -52,7 +52,7 @@ if ($menu && $menu->getActive()) {
         <jdoc:include type="modules" name="sidebar" style="xhtml" />
       </div>
       <?php endif; ?>
-    
+
       <div id="bottom">
         <jdoc:include type="modules" name="bottom" style="xhtml" />
       </div>
@@ -68,7 +68,7 @@ if ($menu && $menu->getActive()) {
         <div class="clear"></div>
       </div>
     </div></div>
-  
+
     <div class="floral dummy"></div>
     <div class="floral last"></div>
   </div>
