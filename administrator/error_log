@@ -1,0 +1,1 @@
+[02-Oct-2012 10:42:16] PHP Fatal error:  Call to undefined method AEDriverPlatformJoomla::qn() in /home/wee/public_html/administrator/components/com_akeeba/akeeba/utils/comconfig.php on line 23

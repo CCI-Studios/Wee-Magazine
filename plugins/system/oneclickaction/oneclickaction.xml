@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="system" method="upgrade">
+	<name>System - One Click Action</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2011-05-26</creationDate>
+	<version>1.0</version>
+	<description>PLG_ONCECLICK_DESCRIPTION</description>
+	<files>
+		<filename plugin="oneclickaction">oneclickaction.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_system_oneclickaction.ini</language>
+		<language tag="en-GB">en-GB.plg_system_oneclickaction.sys.ini</language>
+		<language tag="el-GR">el-GR.plg_system_oneclickaction.ini</language>
+		<language tag="el-GR">el-GR.plg_system_oneclickaction.sys.ini</language>
+		<language tag="fr-FR">el-GR.plg_system_oneclickaction.ini</language>
+		<language tag="fr-FR">el-GR.plg_system_oneclickaction.sys.ini</language>
+		<language tag="da-DK">da-DK.plg_system_oneclickaction.ini</language>
+		<language tag="da-DK">da-DK.plg_system_oneclickaction.sys.ini</language>
+		<language tag="de-DE">de-DE.plg_system_oneclickaction.ini</language>
+		<language tag="de-DE">de-DE.plg_system_oneclickaction.sys.ini</language>
+		<language tag="es-ES">es-ES.plg_system_oneclickaction.ini</language>
+		<language tag="es-ES">es-ES.plg_system_oneclickaction.sys.ini</language>
+		<language tag="nb-NO">nb-NO.plg_system_oneclickaction.ini</language>
+		<language tag="nb-NO">nb-NO.plg_system_oneclickaction.sys.ini</language>
+		<language tag="nl-NL">nl-NL.plg_system_oneclickaction.ini</language>
+		<language tag="nl-NL">nl-NL.plg_system_oneclickaction.sys.ini</language>
+		<language tag="pl-PL">pl-PL.plg_system_oneclickaction.ini</language>
+		<language tag="pl-PL">pl-PL.plg_system_oneclickaction.sys.ini</language>
+		<language tag="uk-UA">uk-UA.plg_system_oneclickaction.ini</language>
+		<language tag="uk-UA">uk-UA.plg_system_oneclickaction.sys.ini</language>
+	</languages>
+</install>
