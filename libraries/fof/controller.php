@@ -117,11 +117,13 @@ class FOFController extends FOFWorksAroundJoomlaToGetAController
 		$classType = FOFInflector::pluralize($config['view']);
 		$className = ucfirst(str_replace('com_', '', $config['option'])).'Controller'.ucfirst($classType);
 		if (!class_exists( $className )) {
-			$app = JFactory::getApplication();
-			if($app->isSite()) {
-				$basePath = JPATH_SITE;
-			} else {
+			list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+			if($isAdmin) {
 				$basePath = JPATH_ADMINISTRATOR;
+			} elseif($isCli) {
+				$basePath = JPATH_ROOT;
+			} else {
+				$basePath = JPATH_SITE;
 			}
 
 			$searchPaths = array(
@@ -149,11 +151,13 @@ class FOFController extends FOFWorksAroundJoomlaToGetAController
 		}
 
 		if (!class_exists( $className )) {
-			$app = JFactory::getApplication();
-			if($app->isSite()) {
-				$basePath = JPATH_SITE;
-			} else {
+			list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+			if($isAdmin) {
 				$basePath = JPATH_ADMINISTRATOR;
+			} elseif($isCli) {
+				$basePath = JPATH_ROOT;
+			} else {
+				$basePath = JPATH_SITE;
 			}
 
 			$searchPaths = array(
@@ -500,6 +504,42 @@ class FOFController extends FOFWorksAroundJoomlaToGetAController
 			if($customURL = FOFInput::getString('returnurl','',$this->input)) $customURL = base64_decode($customURL);
 			$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.$this->view.'&task=edit&id='.$id;
 			$this->setRedirect($url, JText::_($textkey));
+		}
+	}
+
+	/**
+	 * Duplicates selected items
+	 */
+	public function copy()
+	{
+		// CSRF prevention
+		if($this->csrfProtection) {
+			$this->_csrfProtection();
+		}
+
+		$model = $this->getThisModel();
+		if(!$model->getId()) $model->setIDsFromRequest();
+
+		$status = $model->copy();
+
+		//check if i'm using an AJAX call, in this case there is no need to redirect
+		$format = FOFInput::getString('format','', $this->input);
+		if($format == 'json')
+		{
+			echo json_encode($status);
+			return;
+		}
+
+		// redirect
+		if($customURL = FOFInput::getString('returnurl','',$this->input)) $customURL = base64_decode($customURL);
+		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
+		if(!$status)
+		{
+			$this->setRedirect($url, $model->getError(), 'error');
+		}
+		else
+		{
+			$this->setRedirect($url);
 		}
 	}
 
@@ -1084,11 +1124,13 @@ class FOFController extends FOFWorksAroundJoomlaToGetAController
 			if(!class_exists($viewClass)) {
 				$viewClass = 'FOFView'.ucfirst($type);
 
-				$app = JFactory::getApplication();
-				if($app->isSite()) {
-					$basePath = JPATH_SITE;
-				} else {
+				list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+				if($isAdmin) {
 					$basePath = JPATH_ADMINISTRATOR;
+				} elseif($isCli) {
+					$basePath = JPATH_ROOT;
+				} else {
+					$basePath = JPATH_SITE;
 				}
 
 				if(!array_key_exists('template_path', $config)) {
@@ -1323,6 +1365,7 @@ class FOFController extends FOFWorksAroundJoomlaToGetAController
 	protected function _csrfProtection()
 	{
 		$hasToken = false;
+		$session = JFactory::getSession();
 		// Joomla! 1.5/1.6/1.7/2.5 (classic Joomla! API) method
 		if(method_exists('JUtility', 'getToken')) {
 			$token = JUtility::getToken();
@@ -1331,9 +1374,16 @@ class FOFController extends FOFWorksAroundJoomlaToGetAController
 		}
 		// Joomla! 2.5+ (Platform 12.1+) method
 		if(!$hasToken) {
-			$session = JFactory::getSession();
 			if(method_exists($session, 'getToken')) {
-				$token = JFactory::getSession()->getToken();
+				$token = $session->getToken();
+				$hasToken = FOFInput::getVar($token, false, $this->input) == 1;
+				if(!$hasToken) $hasToken = FOFInput::getVar('_token', null, $this->input) == $token;
+			}
+		}
+		// Joomla! 2.5+ formToken method
+		if(!$hasToken) {
+			if(method_exists($session, 'getFormToken')) {
+				$token = $session->getFormToken();
 				$hasToken = FOFInput::getVar($token, false, $this->input) == 1;
 				if(!$hasToken) $hasToken = FOFInput::getVar('_token', null, $this->input) == $token;
 			}
@@ -1341,6 +1391,7 @@ class FOFController extends FOFWorksAroundJoomlaToGetAController
 
 		if(!$hasToken) {
 			JError::raiseError('403', version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN') : JText::_('Request Forbidden'));
+			return false;
 		}
 	}
 }

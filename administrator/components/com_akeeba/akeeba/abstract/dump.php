@@ -629,13 +629,16 @@ abstract class AEAbstractDump extends AEAbstractPart
 		if( $error = $db->getError() )
 		{
 			$this->setError(__CLASS__.' :: Database Error: '.$error);
-			return false;
+			$false = false;
+			return $false;
 		}
 
 		if( $db->getErrorNum() > 0 )
 		{
-			$this->setError(__CLASS__.' :: Database Error: '.$db->getErrorMsg());
-			return false;
+			$error = $db->getErrorMsg();
+			$this->setError(__CLASS__.' :: Database Error: '.$error);
+			$false = false;
+			return $false;
 		}
 
 		return $db;

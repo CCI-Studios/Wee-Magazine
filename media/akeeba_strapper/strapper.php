@@ -39,6 +39,9 @@ class AkeebaStrapper {
 	/** @var string A query tag to append to CSS and JS files for versioning purposes */
 	public static $tag = null;
 	
+	/** @var bool Should I preload my Javascript/CSS files on Joomla! 2.5 or earlier? */
+	public static $preloadOnOldJoomla = true;
+	
 	/**
 	 * Is this something running under the CLI mode?
 	 * @staticvar bool|null $isCli
@@ -203,7 +206,7 @@ ENDSCRIPT;
   * Peace.
   */
  function AkeebaStrapperLoader()
- {
+ {	 
  	// If there are no script defs, just go to sleep
  	if(
 		empty(AkeebaStrapper::$scriptURLs) &&
@@ -224,13 +227,13 @@ ENDSCRIPT;
  
  	$myscripts = '';
 	
-	if(version_compare(JVERSION, '3.0', 'lt')) {
+	if(version_compare(JVERSION, '3.0', 'lt') && AkeebaStrapper::$preloadOnOldJoomla) {
 		$buffer = JResponse::getBody();
 	}
 	
  	if(!empty(AkeebaStrapper::$scriptURLs)) foreach(AkeebaStrapper::$scriptURLs as $url)
  	{
-		if(basename($url) == 'bootstrap.min.js') {
+		if(AkeebaStrapper::$preloadOnOldJoomla && (basename($url) == 'bootstrap.min.js')) {
 			// Special case: check that nobody else is using bootstrap[.min].js on the page.
 			$scriptRegex="/<script [^>]+(\/>|><\/script>)/i";
 			$jsRegex="/([^\"\'=]+\.(js)(\?[^\"\']*){0,1})[\"\']/i";
@@ -246,7 +249,7 @@ ENDSCRIPT;
 			}
 			if($skip) continue;
 		}
-		if(version_compare(JVERSION, '3.0', 'lt')) {
+		if(version_compare(JVERSION, '3.0', 'lt') && AkeebaStrapper::$preloadOnOldJoomla) {
 			$myscripts .= '<script type="text/javascript" src="'.$url.$tag.'"></script>'."\n";
 		} else {
 			JFactory::getDocument()->addScript($url.$tag);
@@ -255,7 +258,7 @@ ENDSCRIPT;
  	
  	if(!empty(AkeebaStrapper::$scriptDefs))
  	{
-		if(version_compare(JVERSION, '3.0', 'lt')) {
+		if(version_compare(JVERSION, '3.0', 'lt') && AkeebaStrapper::$preloadOnOldJoomla) {
 			$myscripts .= '<script type="text/javascript" language="javascript">'."\n";
 		} else {
 			$myscripts = '';
@@ -264,7 +267,7 @@ ENDSCRIPT;
  		{
  			$myscripts .= $def."\n";
  		}
-		if(version_compare(JVERSION, '3.0', 'lt')) {
+		if(version_compare(JVERSION, '3.0', 'lt') && AkeebaStrapper::$preloadOnOldJoomla) {
 			$myscripts .= '</script>'."\n";
 		} else {
 			JFactory::getDocument()->addScriptDeclaration($myscripts);
@@ -273,7 +276,7 @@ ENDSCRIPT;
 	
  	if(!empty(AkeebaStrapper::$cssURLs)) foreach(AkeebaStrapper::$cssURLs as $url)
  	{
-		if(version_compare(JVERSION, '3.0', 'lt')) {
+		if(version_compare(JVERSION, '3.0', 'lt') && AkeebaStrapper::$preloadOnOldJoomla) {
 			$myscripts .= '<link type="text/css" rel="stylesheet" href="'.$url.$tag.'" />'."\n";
 		} else {
 			JFactory::getDocument()->addStyleSheet($url.$tag);
@@ -285,7 +288,7 @@ ENDSCRIPT;
  		$myscripts .= '<style type="text/css">'."\n";
  		foreach(AkeebaStrapper::$cssDefs as $def)
  		{
-			if(version_compare(JVERSION, '3.0', 'lt')) {
+			if(version_compare(JVERSION, '3.0', 'lt') && AkeebaStrapper::$preloadOnOldJoomla) {
 				$myscripts .= $def."\n";
 			} else {
 				JFactory::getDocument()->addScriptDeclaration($def."\n");
@@ -294,7 +297,7 @@ ENDSCRIPT;
  		$myscripts .= '</style>'."\n";
  	}
  	
-	if(version_compare(JVERSION, '3.0', 'lt')) {
+	if(version_compare(JVERSION, '3.0', 'lt') && AkeebaStrapper::$preloadOnOldJoomla) {
 		$pos = strpos($buffer, "<head>");
 		if($pos > 0)
 		{
@@ -307,7 +310,7 @@ ENDSCRIPT;
 // Add our pseudo-plugin to the application event queue
 if(!AkeebaStrapper::isCli()) {
 	$app = JFactory::getApplication();
-	if(version_compare(JVERSION, '3.0', 'lt')) {
+	if(version_compare(JVERSION, '3.0', 'lt') && AkeebaStrapper::$preloadOnOldJoomla) {
 		$app->registerEvent('onAfterRender', 'AkeebaStrapperLoader');
 	} else {
 		$app->registerEvent('onBeforeRender', 'AkeebaStrapperLoader');

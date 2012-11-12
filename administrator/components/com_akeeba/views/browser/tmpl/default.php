@@ -36,7 +36,7 @@ ENDJS
 		<input type="hidden" name="tmpl" value="component" />
 		<input type="hidden" name="folder" id="folder" value="" />
 		<input type="hidden" name="processfolder" id="processfolder" value="0" />
-		<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 	</form>
 	<?php else: ?>
 
@@ -64,7 +64,7 @@ ENDJS
 					<i class="icon-check icon-white"></i>
 					<?php echo JText::_('BROWSER_LBL_USE'); ?>
 				</button>
-				<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+				<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 			</form>
 		</div>
 	</div>

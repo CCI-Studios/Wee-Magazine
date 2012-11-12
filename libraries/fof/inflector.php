@@ -4,6 +4,7 @@
  *  @copyright Copyright (c)2010-2012 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
+defined('_JEXEC') or die();
 
 /**
  * The FOFInflector is a direct copy of Koowa's KInflector class, which
@@ -74,7 +75,7 @@ class FOFInflector
             '/(tomato|hero|buffalo)es$/i'  => '\1',
 			'/([octop|vir])i$/i' 	=> '\1us',
             '/(gen)era$/i'          => '\1us',
-		    '/(cris|^ax|test)es$/i' => '\1is', 
+		    '/(cris|^ax|test)es$/i' => '\1is',
 			'/(shoe)s$/i' 			=> '\1',
 			'/(o)es$/i' 			=> '\1',
 			'/(bus)es$/i' 			=> '\1',
@@ -92,7 +93,7 @@ class FOFInflector
 			'/([ti]|addend)a$/i' 	=> '\1um',
             '/(alumn|formul)ae$/i'  => '$1a',
 			'/(n)ews$/i' 			=> '\1ews',
-			'/(.*)ss$/i'            => '\1ss',       
+			'/(.*)ss$/i'            => '\1ss',
 			'/(.*)s$/i' 			=> '\1',
 		),
 
@@ -342,16 +343,16 @@ class FOFInflector
 	 * @param string $string The word to check
 	 * @return boolean
 	 */
-	public static function isSingular($string) 
+	public static function isSingular($string)
 	{
 		// Check cache assuming the string is plural.
 		$singular = isset(self::$_cache['singularized'][$string]) ? self::$_cache['singularized'][$string] : null;
 		$plural   = $singular && isset(self::$_cache['pluralized'][$singular]) ? self::$_cache['pluralized'][$singular] : null;
-		
+
 		if($singular && $plural) {
 			return $plural != $string;
 		}
-		
+
 		// If string is not in the cache, try to pluralize and singularize it.
 		return self::singularize(self::pluralize($string)) == $string;
 	}
@@ -362,16 +363,16 @@ class FOFInflector
 	 * @param string $string
 	 * @return boolean
 	 */
-	public static function isPlural($string) 
+	public static function isPlural($string)
 	{
 		// Check cache assuming the string is singular.
 		$plural   = isset(self::$_cache['pluralized'][$string]) ? self::$_cache['pluralized'][$string] : null;
 		$singular = $plural && isset(self::$_cache['singularized'][$plural]) ? self::$_cache['singularized'][$plural] : null;
-		
+
 		if($plural && $singular) {
 			return $singular != $string;
 		}
-		
+
 		// If string is not in the cache, try to singularize and pluralize it.
 		return self::pluralize(self::singularize($string)) == $string;
 	}

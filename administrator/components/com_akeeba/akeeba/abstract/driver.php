@@ -148,7 +148,7 @@ abstract class AEAbstractDriver extends AEAbstractObject implements AEAbstractDr
 	public function open()
 	{
 		// Don't try to reconnect if we're already connected
-		if(is_resource($this->connection)) return $this;
+		if(is_resource($this->connection) && !is_null($this->connection)) return $this;
 		
 		// Determine utf-8 support
 		$this->utf = $this->hasUTF();

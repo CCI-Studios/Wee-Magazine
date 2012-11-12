@@ -114,18 +114,20 @@ class AEDriverPlatformJoomla extends JObject
 	}
 	
 	public function __get($name) {
-		if(!property_exists($this->dbo, $name)) {
+		if(isset($this->dbo->$name) || property_exists($this->dbo, $name)) {
+			return $this->dbo->$name;
+		} else {
 			$this->dbo->$name = null;
 			user_error('Database driver does not support property '.$name);
 		}
-		return $this->dbo->$name;
 	}
 	
 	public function __set($name, $value) {
-		if(!property_exists($this->dbo, $name)) {
+		if(isset($this->dbo->name) || property_exists($this->dbo, $name)) {
+			$this->dbo->$name = $value;
+		} else {
 			$this->dbo->$name = null;
 			user_error('Database driver not support property '.$name);
 		}
-		$this->dbo->$name = $value;
 	}
 }

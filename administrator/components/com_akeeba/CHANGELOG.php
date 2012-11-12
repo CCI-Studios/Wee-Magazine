@@ -1,4 +1,37 @@
 <?php die();?>
+Akeeba Backup 3.6.9
+================================================================================
++ The users have to accept the license and support policy before using the component
++ You can now exclude the username and password of your database connection from the backup
+# [MEDIUM] ABI: Passwords with dollar signs will cause the configuration.php to throw parse errors
+# [LOW] The Akeeba Backup update notification plugin didn't work
+# [LOW] Notice thrown by the System Restore Points feature
+# [LOW] JClientFtp::getInstance requires an empty array, not null, as its third parameter
+
+Akeeba Backup 3.6.8
+================================================================================
+# [LOW] Sometimes the interface renders strangely (e.g. when a plugin sets format="")
+
+Akeeba Backup 3.6.7
+================================================================================
+# [HIGH] Front-end backup doesn't work
+
+Akeeba Backup 3.6.6
+================================================================================
++ Warning when your tmp or log folder are equal to the site root which would result in incomplete backup
++ Profile import/export (including all profile settings, of course!)
+~ Small visual improvements in the Configuration page
+~ Improved integrated help rendering
+# [HIGH] CLI backups of databases containing data or tables with non-ASCII characters would fail
+# [HIGH] J3 Enabling System Restore Points made it impossible to install extensions on the site
+# [MEDIUM] Sometimes no profiles are shown in the Profiles Management page
+# [MEDIUM] Profile settings would be reset when turning encryption on/off
+# [MEDIUM] ABI Using passwords with double quotes would result in inability to use the restored site (thanks @nternetinspired)
+# [LOW] J3 Tooltips in Configuration page are surrounded by a smaller white box
+# [LOW] J3 Component Parameters icon opened a modal box instead of simply redirecting to com_config
+# [LOW] J3 Incomaptibility of jQuery UI with Joomla!'s jQuery version leading to broken Multiple Databases and Off-Site Folders inclusion filters
+* All items marked with "J3" only apply to Joomla! 3. Items marked with ABI apply to Akeeba Backup Installer
+
 Akeeba Backup 3.6.6.rc1 RELEASE CANDIDATE
 ================================================================================
 + Support for Joomla! 3.0 stable

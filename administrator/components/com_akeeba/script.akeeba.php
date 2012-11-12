@@ -321,7 +321,7 @@ class Com_AkeebaInstallerScript
 <?php endif; ?>
 
 <div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
-	You can download translation files <a href="http://cdn.akeebabackup.com/language/akeebabackup/">directly from our CDN page</a>.
+	You can download translation files <a href="http://cdn.akeebabackup.com/language/akeebabackup/index.html">directly from our CDN page</a>.
 </div>
 
 <table class="adminlist">

@@ -563,8 +563,11 @@ function parse_config_gui_data(data, rootnode)
 							engine_config_container.toggleClass('ui-helper-hidden');
 							e.preventDefault();
 						});
+						
+						var spacerSpan = $(document.createElement('span')).html('&nbsp;');
 
 						button.prependTo( controlWrapper );
+						spacerSpan.prependTo( controlWrapper );
 						editor.prependTo( controlWrapper );
 						
 						controlWrapper.appendTo( row_div );
@@ -608,11 +611,12 @@ function parse_config_gui_data(data, rootnode)
 						});
 
 						var button = $(document.createElement('button'))
-							.html(akeeba_translations['UI-BROWSE'])
-							.addClass('btn btn-mini btn-inverse');
+							.attr('title',akeeba_translations['UI-BROWSE'])
+							.html('&nbsp;')
+							.addClass('btn');
 							
 						var icon = $(document.createElement('i'))
-							.addClass('icon-folder-open icon-white')
+							.addClass('icon-folder-open')
 							.prependTo(button);
 
 						button.bind('click',function(event){
@@ -620,9 +624,12 @@ function parse_config_gui_data(data, rootnode)
 							if( akeeba_browser_hook != null ) akeeba_browser_hook( editor.val(), editor );
 						});
 						
-						var span = $(document.createElement('span'));
-						editor.appendTo( controlWrapper );
-						button.appendTo( controlWrapper );
+						var span = $(document.createElement('span')).addClass('input-append');
+						
+						editor.appendTo( span );
+						button.appendTo( span );
+						
+						span.appendTo( controlWrapper )
 						
 						controlWrapper.appendTo( row_div );
 						break;
@@ -654,7 +661,7 @@ function parse_config_gui_data(data, rootnode)
 							} catch(err) {}
 						});
 						
-						var span = $(document.createElement('span'));
+						var span = $(document.createElement('span')).addClass('input-append');
 						editor.appendTo( span );
 						button.appendTo( span );
 						
@@ -722,6 +729,7 @@ function parse_config_gui_data(data, rootnode)
 							.attr('size', '10')
 							.attr('id',config_key+'_custom')
 							.css('display','none')
+							.css('margin-left', '6px')
 							.addClass('input-mini');
 						custom.blur(function(){
 							var value = parseFloat(custom.val());

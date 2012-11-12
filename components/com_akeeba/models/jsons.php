@@ -192,7 +192,7 @@ class AkeebaModelJsons extends FOFModel
 		// Store the client-specified key, or use the server key if none specified and the request
 		// came encrypted.
 		$this->password = isset($request->body->key) ? $request->body->key : null;
-		$hasKey = property_exists($request->body, 'key') ? !is_null($request->body->key) : false;
+		$hasKey = (isset($request->body->key) || property_exists($request->body, 'key')) ? !is_null($request->body->key) : false;
 		if(!$hasKey && ($request->encapsulation != self::ENCAPSULATION_RAW) )
 		{
 			$this->password = $this->serverKey();

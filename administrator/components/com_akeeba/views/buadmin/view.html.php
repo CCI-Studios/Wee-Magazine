@@ -137,10 +137,11 @@ ENDSCRIPT;
 		$this->assignRef( 'pagination',	$model->getPagination($filters)); // Pagination object
 
 		// Add live help
-		AkeebaHelperIncludes::addHelp('buadmin');
-		
 		if($task == 'restorepoint') {
 			$this->setLayout('restorepoint');
+			AkeebaHelperIncludes::addHelp('restorepoint');
+		} else {
+			AkeebaHelperIncludes::addHelp('buadmin');
 		}
 		
 		return true;

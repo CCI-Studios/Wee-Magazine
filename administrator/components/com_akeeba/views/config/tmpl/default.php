@@ -85,7 +85,7 @@ JHtml::_('behavior.modal');
 <input type="hidden" name="option" value="com_akeeba" />
 <input type="hidden" name="view" value="config" />
 <input type="hidden" name="task" value="" />
-<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 
 <!-- This div contains dynamically generated user interface elements -->
 <div id="akeebagui">
@@ -546,7 +546,7 @@ JHtml::_('behavior.modal');
 			animate: false,
 			html: true,
 			placement: 'bottom',
-			template: '<div class="popover" onmouseover="akeeba.jQuery(this).mouseleave(function() {akeeba.jQuery(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+			template: '<div class="popover akeeba-bootstrap-popover" onmouseover="akeeba.jQuery(this).mouseleave(function() {akeeba.jQuery(this).hide(); });"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
 		})
 		.click(function(e) {
 			e.preventDefault();

@@ -26,6 +26,10 @@ class FOFRenderJoomla extends FOFRenderAbstract
 	 */
 	public function preRender($view, $task, $input, $config=array())
 	{
+		$format = FOFInput::getCmd('format', 'html', $input);
+		if(empty($format)) $format = 'html';
+		if($format != 'html') return;
+
 		$this->renderButtons($view, $task, $input, $config);
 		$this->renderLinkbar($view, $task, $input, $config);
 	}
@@ -79,6 +83,6 @@ class FOFRenderJoomla extends FOFRenderAbstract
 		// delete faux links, since if SEF is on, Joomla will follow the link instead of submitting the form
 		$bar_content = str_replace('href="#"','', $bar->render());
 
-		echo '<div id="FOFHeaderHolder">' , $title , $bar_content , '<div style="clear:both"></div>', '</div>';
+		echo '<div id="FOFHeaderHolder">' , $bar_content , $title , '<div style="clear:both"></div>', '</div>';
 	}
 }

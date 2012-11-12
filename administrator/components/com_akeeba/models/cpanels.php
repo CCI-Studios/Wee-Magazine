@@ -219,12 +219,12 @@ class AkeebaModelCpanels extends FOFModel
 			jimport('joomla.client.ftp');
 			if(version_compare(JVERSION,'3.0','ge')) {
 				$ftp = JClientFTP::getInstance(
-					$ftpOptions['host'], $ftpOptions['port'], null,
+					$ftpOptions['host'], $ftpOptions['port'], array(),
 					$ftpOptions['user'], $ftpOptions['pass']
 				);
 			} else {
 				$ftp = JFTP::getInstance(
-					$ftpOptions['host'], $ftpOptions['port'], null,
+					$ftpOptions['host'], $ftpOptions['port'], array(),
 					$ftpOptions['user'], $ftpOptions['pass']
 				);
 			}
@@ -276,7 +276,7 @@ class AkeebaModelCpanels extends FOFModel
 		
 		// Loop all profiles and decrypt their settings
 		$profilesModel = FOFModel::getTmpInstance('Profiles','AkeebaModel');
-		$profiles = $profilesModel->getItemsList(true);
+		$profiles = $profilesModel->getList(true);
 		$db = $this->getDBO();
 		foreach($profiles as $profile)
 		{
@@ -301,7 +301,7 @@ class AkeebaModelCpanels extends FOFModel
 		
 		// Loop all profiles and encrypt their settings
 		$profilesModel = FOFModel::getTmpInstance('Profiles','AkeebaModel');
-		$profiles = $profilesModel->getItemsList(true);
+		$profiles = $profilesModel->getList(true);
 		$db = $this->getDBO();
 		if(!empty($profiles)) foreach($profiles as $profile)
 		{

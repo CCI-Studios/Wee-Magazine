@@ -50,10 +50,7 @@ class AkeebaControllerBackup extends FOFController
 			$newProfile = FOFInput::getInt('profileid', -10, $this->input);
 			if(is_numeric($newProfile) && ($newProfile > 0))
 			{
-				// CSRF prevention
-				if(!FOFInput::getVar(JFactory::getSession()->getToken(), false, $this->input)) {
-					JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
-				}
+				$this->_csrfProtection();
 
 				$session = JFactory::getSession();
 				$session->set('profile', $newProfile, 'akeeba');

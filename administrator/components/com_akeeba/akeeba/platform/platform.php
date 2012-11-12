@@ -173,18 +173,20 @@ class AEPlatform
 	}
 	
 	public function __get($name) {
-		if(!property_exists($this->_platformObject, $name)) {
+		if(isset($this->_platformObject->name) || property_exists($this->_platformObject, $name)) {
+			return $this->_platformObject->$name;
+		} else {
 			$this->_platformObject->$name = null;
 			user_error('AEPlatform does not support property '.$name, E_NOTICE);
 		}
-		return $this->_platformObject->$name;
 	}
 	
 	public function __set($name, $value) {
-		if(!property_exists($this->_platformObject, $name)) {
+		if(isset($this->_platformObject->name) || property_exists($this->_platformObject, $name)) {
+			$this->_platformObject->$name = $value;
+		} else {
 			$this->_platformObject->$name = null;
 			user_error('AEPlatform does not support property '.$name, E_NOTICE);
 		}
-		$this->_platformObject->$name = $value;
 	}
 }

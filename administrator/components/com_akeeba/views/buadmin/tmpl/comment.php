@@ -20,7 +20,7 @@ $getText = $editor->getContent('comment');
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="view" value="buadmin" />
 	<input type="hidden" name="id" value="<?php echo $this->record['id'] ?>" />
-	<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 
 	<div class="control-group">
 		<label class="control-label" for="description">

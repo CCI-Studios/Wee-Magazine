@@ -45,7 +45,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 	<input type="hidden" name="option" value="com_akeeba" />
 	<input type="hidden" name="view" value="postsetup" />
 	<input type="hidden" name="task" id="task" value="save" />
-	<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 	
 	<p><?php echo JText::_('AKEEBA_POSTSETUP_LBL_WHATTHIS'); ?></p>
 
@@ -99,8 +99,24 @@ JFactory::getDocument()->addScriptDeclaration($script);
 	<?php else: ?>
 	<input type="hidden" id="minstability" name="minstability" value="stable" />
 	<?php endif; ?>
-	
 	<br/>
+	
+	<label for="acceptlicense" class="postsetup-main">
+		<input type="checkbox" id="acceptlicense" name="acceptlicense" <?php if($this->acceptlicense): ?>checked="checked"<?php endif; ?> />
+		<?php echo JText::_('AKEEBA_POSTSETUP_LBL_ACCEPTLICENSE')?>
+	</label>
+	</br>
+	<div class="postsetup-desc"><?php echo JText::_('AKEEBA_POSTSETUP_DESC_ACCEPTLICENSE');?></div>
+	<br/>
+	
+	<label for="acceptsupport" class="postsetup-main">
+		<input type="checkbox" id="acceptsupport" name="acceptsupport" <?php if($this->acceptsupport): ?>checked="checked"<?php endif; ?> />
+		<?php echo JText::_('AKEEBA_POSTSETUP_LBL_ACCEPTSUPPORT')?>
+	</label>
+	</br>
+	<div class="postsetup-desc"><?php echo JText::_('AKEEBA_POSTSETUP_DESC_ACCEPTSUPPORT');?></div>
+	<br/>
+	
 	<button id="akeeba-postsetup-apply" class="btn-primary btn-large" onclick="return false;"><?php echo JText::_('AKEEBA_POSTSETUP_LBL_APPLY');?></button>
 
 </form>

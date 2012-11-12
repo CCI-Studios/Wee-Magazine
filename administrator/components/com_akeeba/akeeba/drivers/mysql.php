@@ -76,7 +76,7 @@ class AEDriverMysql extends AEAbstractDriver
 		$this->_database = $database;
 		$this->selectDatabase = $select;
 		
-		if(!is_resource($this->connection)) $this->open();
+		if(!is_resource($this->connection) || is_null($this->connection)) $this->open();
 	}
 
 	public function open()
@@ -110,6 +110,8 @@ class AEDriverMysql extends AEAbstractDriver
 		{
 			$this->select($this->_database);
 		}
+		
+		$this->setUTF();
 	}
 
 	public function close()
@@ -118,7 +120,7 @@ class AEDriverMysql extends AEAbstractDriver
 		if (is_resource($this->cursor)) {
 			mysql_free_result($this->cursor);
 		}
-		if (is_resource($this->connection)) {
+		if (is_resource($this->connection) || !is_null($this->connection)) {
 			$return = mysql_close($this->connection);
 		}
 		$this->connection = null;

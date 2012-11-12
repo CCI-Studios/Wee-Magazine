@@ -584,7 +584,7 @@ class AECoreDomainFinalization extends AEAbstractPart
 		if($useDayQuotas) {
 			$killDatetime = new DateTime();
 			$killDatetime->modify('-'.$daysQuota.($daysQuota == 1 ? ' day' : ' days'));
-			$killTS = $killDatetime->format('U', true);
+			$killTS = $killDatetime->format('U');
 			foreach($allFiles as $file) {
 				if($file['id'] == $latestBackupId) continue;
 				
@@ -802,12 +802,12 @@ class AECoreDomainFinalization extends AEAbstractPart
 		if($useDayQuotas) {
 			$killDatetime = new DateTime();
 			$killDatetime->modify('-'.$daysQuota.($daysQuota == 1 ? ' day' : ' days'));
-			$killTS = $killDatetime->format('U', true);
+			$killTS = $killDatetime->format('U');
 			
 			foreach($allRecords as $def) {
 				$backupstart = new DateTime($def['backupstart']);
-				$backupTS = $backupstart->format('U', true);
-				$backupDay = $backupstart->format('d', true);
+				$backupTS = $backupstart->format('U');
+				$backupDay = $backupstart->format('d');
 
 				// Is this on a preserve day?
 				if($preserveDay > 0) {

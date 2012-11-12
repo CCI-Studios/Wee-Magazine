@@ -90,7 +90,7 @@ akeeba.jQuery(document).ready(function($){
 	}
 	?>
 	<p>
-		<a class="btn btn-small btn-primary" href="index.php?option=com_akeeba&view=cpanel&task=disablephpwarning&<?php echo JFactory::getSession()->getToken() ?>=1<?php echo $returnurl ?>">
+		<a class="btn btn-small btn-primary" href="index.php?option=com_akeeba&view=cpanel&task=disablephpwarning&<?php echo JFactory::getSession()->getFormToken() ?>=1<?php echo $returnurl ?>">
 			<?php echo JText::_('COM_AKEEBA_CONFIG_LBL_OUTDATEDPHP_BUTTON'); ?>
 		</a>
 	</p>
@@ -155,7 +155,7 @@ akeeba.jQuery(document).ready(function($){
 		<input type="hidden" name="returnurl" value="<?php htmlentities($this->returnurl, ENT_COMPAT, 'UTF-8', false) ?>" />
 		<input type="hidden" name="description" id="flipDescription" value="" />
 		<input type="hidden" name="comment" id="flipComment" value="" />
-		<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 
 		<label>
 			<?php echo JText::_('CPANEL_PROFILE_TITLE'); ?>: #<?php echo $this->profileid; ?>

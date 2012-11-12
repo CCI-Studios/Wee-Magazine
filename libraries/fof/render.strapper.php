@@ -26,6 +26,10 @@ class FOFRenderStrapper extends FOFRenderAbstract
 	 */
 	public function preRender($view, $task, $input, $config=array())
 	{
+		$format = FOFInput::getCmd('format', 'html', $input);
+		if(empty($format)) $format = 'html';
+		if($format != 'html') return;
+		
 		echo "<div class=\"akeeba-bootstrap\">\n";
 		$this->renderButtons($view, $task, $input, $config);
 		$this->renderLinkbar($view, $task, $input, $config);
@@ -40,6 +44,9 @@ class FOFRenderStrapper extends FOFRenderAbstract
 	 */
 	public function postRender($view, $task, $input, $config=array())
 	{
+		$format = FOFInput::getCmd('format', 'html', $input);
+		if($format != 'html') return;
+		
 		echo "</div>\n";
 	}
 	
@@ -56,16 +63,56 @@ class FOFRenderStrapper extends FOFRenderAbstract
 		if(!empty($links)) {
 			echo "<ul class=\"nav nav-tabs\">\n";
 			foreach($links as $link) {
-				echo "<li";
-				if($link['active']) echo ' class="active"';
-				echo ">";
-				if($link['icon']) {
-					echo "<i class=\"icon icon-".$link['icon']."\"></i>";
+				$dropdown = false;
+				if(array_key_exists('dropdown', $link)) {
+					$dropdown = $link['dropdown'];
 				}
-				if($link['link']) {
-					echo "<a href=\"".$link['link']."\">".$link['name']."</a>";
-				} else {
+				
+				if($dropdown) {
+					echo "<li";
+					$class = 'dropdown';
+					if($link['active']) $class .= ' active';
+					echo ' class="'.$class.'">';
+					
+					echo '<a class="dropdown-toggle" data-toggle="dropdown" href="#">';
+					if($link['icon']) {
+						echo "<i class=\"icon icon-".$link['icon']."\"></i>";
+					}
 					echo $link['name'];
+					echo '<b class="caret"></b>';
+					echo '</a>';
+					
+					echo "\n<ul class=\"dropdown-menu\">";
+					foreach($link['items'] as $item) {
+						
+						echo "<li";
+						if($item['active']) echo ' class="active"';
+						echo ">";
+						if($item['icon']) {
+							echo "<i class=\"icon icon-".$item['icon']."\"></i>";
+						}
+						if($item['link']) {
+							echo "<a tabindex=\"-1\" href=\"".$item['link']."\">".$item['name']."</a>";
+						} else {
+							echo $item['name'];
+						}
+						echo "</li>";
+						
+					}
+					echo "</ul>\n";
+					
+				} else {
+					echo "<li";
+					if($link['active']) echo ' class="active"';
+					echo ">";
+					if($link['icon']) {
+						echo "<i class=\"icon icon-".$link['icon']."\"></i>";
+					}
+					if($link['link']) {
+						echo "<a href=\"".$link['link']."\">".$link['name']."</a>";
+					} else {
+						echo $link['name'];
+					}					
 				}
 				
 				echo "</li>\n";

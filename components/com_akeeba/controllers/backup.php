@@ -101,7 +101,7 @@ class AkeebaControllerBackup extends FOFController
 			flush();
 			JFactory::getApplication()->close();
 		}
-		elseif($array['HasRun'] == false)
+		elseif($array['HasRun'] == 1)
 		{
 			// All done
 			AEFactory::nuke();

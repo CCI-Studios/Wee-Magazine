@@ -62,4 +62,70 @@ class AkeebaControllerProfiles extends FOFController
 		// Redirect
 		$this->setRedirect('index.php?option=com_akeeba&view=profiles', $message, $type);
 	}
+	
+	/**
+	 * Imports an exported profile .json file
+	 */
+	public function import()
+	{
+		$this->_csrfProtection();
+		
+		$user = JFactory::getUser();
+		if (!$user->authorise('akeeba.configure', 'com_akeeba')) {
+			return JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+		}
+		
+		// Get the user
+		$user		= JFactory::getUser();
+
+		// Get some data from the request
+		$file		= FOFInput::getVar('importfile', '', $_FILES, 'array');
+		
+		if (isset($file['name']))
+		{
+			// Load the file data
+			$data = JFile::read($file['tmp_name']);
+			@unlink($file['tmp_name']);
+			
+			// JSON decode
+			$data = json_decode($data, true);
+			
+			// Check for data validity
+			$isValid = is_array($data) && !empty($data);
+			if($isValid) {
+				$isValid = $isValid && array_key_exists('description', $data);
+			}
+			if($isValid) {
+				$isValid = $isValid && array_key_exists('configuration', $data);
+			}
+			if($isValid) {
+				$isValid = $isValid && array_key_exists('filters', $data);
+			}
+			
+			if(!$isValid) {
+				$this->setRedirect('index.php?option=com_akeeba&view=profiles', JText::_('COM_AKEEBA_PROFILES_ERR_IMPORT_INVALID'), 'error');
+				return false;
+			}
+			
+			// Unset the id, if it exists
+			if(array_key_exists('id', $data)) {
+				unset($data['id']);
+			}
+			
+			// Try saving the profile
+			$result = $this->getThisModel()->getTable()->save($data);
+			
+			if($result) {
+				$this->setRedirect('index.php?option=com_akeeba&view=profiles', JText::_('COM_AKEEBA_PROFILES_MSG_IMPORT_COMPLETE'));
+			} else {
+				$this->setRedirect('index.php?option=com_akeeba&view=profiles', JText::_('COM_AKEEBA_PROFILES_ERR_IMPORT_FAILED'), 'error');
+			}
+		}
+		else
+		{
+			$this->setRedirect('index.php?option=com_akeeba&view=profiles', JText::_('MSG_UPLOAD_INVALID_REQUEST'), 'error');
+			return false;
+		}
+		
+	}
 }

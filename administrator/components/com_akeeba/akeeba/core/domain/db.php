@@ -240,6 +240,8 @@ class AECoreDomainDb extends AEAbstractPart
 		AEUtilLogger::WriteLog(_AE_LOG_DEBUG, __CLASS__."AkeebaCUBEDomainDBBackup :: Creating databases.ini data");
 		// Create a new string
 		$databasesINI = '';
+		
+		$blankOutPass = AEFactory::getConfiguration()->get('engine.dump.common.blankoutpass', 0);
 
 		// Loop through databases list
 		foreach( $this->dumpedDatabases as $definition )
@@ -249,7 +251,22 @@ class AECoreDomainDb extends AEAbstractPart
 			$dboInstance = AEFactory::getDatabase($definition);
 			$tech = $dboInstance->getDriverType();
 
-			$this->databases_ini .= <<<ENDDEF
+			if($blankOutPass) {
+				$this->databases_ini .= <<<ENDDEF
+[$section]
+dbtype = "$tech"
+dbname = "{$definition['database']}"
+sqlfile = "{$definition['dumpFile']}"
+dbhost = "{$definition['host']}"
+dbuser = ""
+dbpass = ""
+prefix = "{$definition['prefix']}"
+parts = "{$definition['parts']}"
+
+ENDDEF;
+				
+			} else {
+				$this->databases_ini .= <<<ENDDEF
 [$section]
 dbtype = "$tech"
 dbname = "{$definition['database']}"
@@ -261,6 +278,7 @@ prefix = "{$definition['prefix']}"
 parts = "{$definition['parts']}"
 
 ENDDEF;
+			}
 		}
 	}
 

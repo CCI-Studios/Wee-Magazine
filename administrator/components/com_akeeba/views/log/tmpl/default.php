@@ -16,7 +16,7 @@ JHtml::_('behavior.framework');
 <form name="adminForm" id="adminForm" action="index.php" method="post" class="form-inline">
 	<input name="option" value="com_akeeba" type="hidden" />
 	<input name="view" value="log" type="hidden" />
-	<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 	<fieldset>
 		<label for="tag"><?php echo JText::_('LOG_CHOOSE_FILE_TITLE'); ?></label>
 		<?php echo JHTML::_('select.genericlist', $this->logs, 'tag', 'onchange=submitform()', 'value', 'text', $this->tag, 'tag') ?>

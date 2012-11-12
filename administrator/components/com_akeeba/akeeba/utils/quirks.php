@@ -99,6 +99,8 @@ class AEUtilQuirks
 
 			self::getQuirk($quirks, '101', 'high');
 			self::getQuirk($quirks, '103', 'high');
+			self::getQuirk($quirks, '104', 'high');
+			self::getQuirk($quirks, '105', 'high');
 
 			self::getQuirk($quirks, '201', 'high');
 			self::getQuirk($quirks, '202', 'medium');
@@ -131,7 +133,7 @@ class AEUtilQuirks
 				'code'			=> $code,
 				'severity'		=> $severity,
 				'description'	=> $description,
-				'help_url'		=> 'http://www.akeebabackup.com/help-support-documentation/warnings/q'.$code.'.html'
+				'help_url'		=> 'https://www.akeebabackup.com/documentation/warnings/q'.$code.'.html'
 				);
 		}
 	}
@@ -225,6 +227,39 @@ class AEUtilQuirks
 		if(!is_numeric($exectime)) return false;
 		if($exectime <= 0) return false;
 		return $exectime < 10;
+	}
+	
+	/**
+	 * Q104 - HIGH - Temp directory is the same as the site's root
+	 *
+	 * @return bool
+	 */
+	private static function q104()
+	{
+		$siteroot = AEPlatform::getInstance()->get_site_root();
+		$siteroot_real = @realpath($siteroot);
+		if(!empty($siteroot_real)) $siteroot = $siteroot_real;
+
+		$temp_directory = JFactory::getConfig()->get('tmp_path', '/tmp');
+
+		return ($siteroot == $temp_directory);
+		
+	}
+
+	/**
+	 * Q104 - HIGH - Log directory is the same as the site's root
+	 *
+	 * @return bool
+	 */
+	private static function q105()
+	{
+		$siteroot = AEPlatform::getInstance()->get_site_root();
+		$siteroot_real = @realpath($siteroot);
+		if(!empty($siteroot_real)) $siteroot = $siteroot_real;
+
+		$log_directory = JFactory::getConfig()->get('log_path', '/var/log');
+
+		return ($siteroot == $log_directory);
 	}
 
 	/**

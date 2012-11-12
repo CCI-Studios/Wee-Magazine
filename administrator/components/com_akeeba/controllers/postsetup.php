@@ -36,6 +36,8 @@ class AkeebaControllerPostsetup extends FOFController
 		$enableAutoupdate = FOFInput::getBool('autoupdate', 0, $this->input);
 		$runConfwiz = FOFInput::getBool('confwiz', 0, $this->input);
 		$minStability = FOFInput::getCmd('minstability', 'stable', $this->input);
+		$acceptlicense = FOFInput::getBool('acceptlicense', 0, $this->input);
+		$acceptsupport = FOFInput::getBool('acceptsupport', 0, $this->input);
 		
 		if(!in_array($minStability, array('alpha','beta','rc','stable'))) {
 			$minStability = 'stable';
@@ -117,12 +119,21 @@ class AkeebaControllerPostsetup extends FOFController
 			$params = new JParameter($rawparams);
 		}
 		
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$params->set('lastversion', AKEEBA_VERSION);
-			$params->set('minstability', $minStability);
+		if($acceptlicense && $acceptsupport) {
+			$version = AKEEBA_VERSION;
 		} else {
-			$params->setValue('lastversion', AKEEBA_VERSION);
+			$version = '0.0.0';
+		}
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$params->set('lastversion', $version);
+			$params->set('minstability', $minStability);
+			$params->set('acceptlicense', $acceptlicense);
+			$params->set('acceptsupport', $acceptsupport);
+		} else {
+			$params->setValue('lastversion', $version);
 			$params->setValue('minstability', $minStability);
+			$params->setValue('acceptlicense', $acceptlicense);
+			$params->setValue('acceptsupport', $acceptsupport);
 		}
 
 		$data = $params->toString('JSON');
@@ -136,23 +147,38 @@ class AkeebaControllerPostsetup extends FOFController
 		
 		// Even better, create the "akeeba.lastversion.php" file with this information
 		$fileData = "<"."?php\ndefined('_JEXEC') or die();\ndefine('AKEEBA_LASTVERSIONCHECK','".
-			AKEEBA_VERSION."');";
+			$version."');";
 		jimport('joomla.filesystem.file');
 		$fileName = JPATH_COMPONENT_ADMINISTRATOR.'/akeeba.lastversion.php';
 		JFile::write($fileName, $fileData);
 		
 		// Force reload the Live Update information
-		$dummy = LiveUpdate::getUpdateInformation(true);
+		if($version != '0.0.0') {
+			$dummy = LiveUpdate::getUpdateInformation(true);
+		}
 
 		// Run the configuration wizard if requested
+		$message = '';
 		if($runConfwiz) {
 			$url = 'index.php?option=com_akeeba&view=confwiz';
 		} else {
 			$url = 'index.php?option=com_akeeba&view=cpanel';
 		}
 		
+		if(!$acceptlicense) {
+			$message = JText::_('AKEEBA_POSTSETUP_ERR_ACCEPTLICENSE');
+			$url = 'index.php?option=com_akeeba&view=postsetup';
+		} elseif(!$acceptsupport) {
+			$message = JText::_('AKEEBA_POSTSETUP_ERR_ACCEPTSUPPORT');
+			$url = 'index.php?option=com_akeeba&view=postsetup';
+		}
+		
 		$app = JFactory::getApplication();
-		$app->redirect($url);
+		if(empty($message)) {
+			$app->redirect($url);
+		} else {
+			$app->redirect($url, $message, 'error');
+		}
 	}
 	
 	private function isMySQL()

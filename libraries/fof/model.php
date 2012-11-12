@@ -455,7 +455,7 @@ class FOFModel extends FOFWorksAroundJoomlaToGetAModel
 
 		return $this;
 	}
-	
+
 	/**
 	 * Resets the saved state for this view
 	 *
@@ -604,6 +604,30 @@ class FOFModel extends FOFWorksAroundJoomlaToGetAModel
 		$this->onAfterSave($table);
 
 		$this->otable = $table;
+		return true;
+	}
+
+	/**
+	 * Copy one or more records
+	 */
+	public function copy()
+	{
+		if(is_array($this->id_list) && !empty($this->id_list)) {
+
+			$table = $this->getTable($this->table);
+
+			if(!$this->onBeforeCopy($table)) return false;
+
+			if(!$table->copy($this->id_list) ) {
+				$this->setError($table->getError());
+				return false;
+			} else {
+				// Call our internal event
+				$this->onAfterCopy($table);
+
+				//@TODO Should we fire the content plugin?
+			}
+		}
 		return true;
 	}
 
@@ -1318,6 +1342,16 @@ class FOFModel extends FOFWorksAroundJoomlaToGetAModel
 			$this->setError($e->getMessage());
 			return false;
 		}
+	}
+
+	protected function onBeforeCopy(&$table)
+	{
+		return true;
+	}
+
+	protected function onAfterCopy(&$table)
+	{
+		return true;
 	}
 
 	protected function onBeforePublish(&$table)

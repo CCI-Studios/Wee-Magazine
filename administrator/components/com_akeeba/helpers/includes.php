@@ -29,8 +29,12 @@ class AkeebaHelperIncludes
 		'regexdbfilter'	=> 'regex-database-tables-exclusion.html',
 		'regexfsfilter'	=> 'regex-files-directories-exclusion.html',
 		'stw'			=> 'stw.html',
-		'restore'		=> '',
-		'acl'			=> 'access-control.html'
+		'restore'		=> 'adminsiter-backup-files.html#integrated-restoration',
+		'acl'			=> 'access-control.html',
+		'restorepoint'	=> 'taking-srps.html',
+		'schedule'		=> 'automating-your-backup.html',
+		'discover'		=> 'ch03s02s05s03.html',
+		's3import'		=> 'ch03s02s05s03.html',
 	);
 
 	static public function addHelp($view)
@@ -46,9 +50,18 @@ class AkeebaHelperIncludes
 	static public function addLiveHelpButton( $page )
 	{
 		if(strpos($page, '.html') === false) $page .= '.html';
-		if(strpos($page, '#') === false) $page .= '#maincol';
+		if(strpos($page, '#') === false) {
+			$page .= '?tmpl=component';
+		} else {
+			$parts = explode('#', $page, 2);
+			$page = $parts[0].'?tmpl=component#'.$parts[1];
+		}
 		$bar = JToolBar::getInstance('toolbar');
 		$label = 'JTOOLBAR_HELP';
-		$bar->appendButton( 'Popup', 'help', $label, 'https://www.akeebabackup.com/documentation/akeeba-backup-documentation/'.$page, 900, 500 );
+		$bar->appendButton( 'Popup', 'help', $label, 'https://www.akeebabackup.com/documentation/akeeba-backup-documentation/'.$page, 960, 500 );
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$css = '#modal-help { width: 1000px; margin: -250px 0 0 -500px; }';
+			JFactory::getDocument()->addStyleDeclaration($css);
+		}
 	}
 }

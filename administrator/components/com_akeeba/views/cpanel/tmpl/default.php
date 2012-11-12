@@ -91,7 +91,7 @@ JFactory::getDocument()->addScriptDeclaration($script,'text/javascript');
 	</p>
 	
 	<p>
-		<a class="btn btn-small btn-primary" href="index.php?option=com_akeeba&view=cpanel&task=disablephpwarning&<?php echo JFactory::getSession()->getToken() ?>=1">
+		<a class="btn btn-small btn-primary" href="index.php?option=com_akeeba&view=cpanel&task=disablephpwarning&<?php echo JFactory::getSession()->getFormToken() ?>=1">
 			<?php echo JText::_('COM_AKEEBA_CONFIG_LBL_OUTDATEDPHP_BUTTON'); ?>
 		</a>
 	</p>
@@ -110,7 +110,7 @@ JFactory::getDocument()->addScriptDeclaration($script,'text/javascript');
 			<input type="hidden" name="option" value="com_akeeba" />
 			<input type="hidden" name="view" value="cpanel" />
 			<input type="hidden" name="task" value="switchprofile" />
-			<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+			<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 			<label>
 				<?php echo JText::_('CPANEL_PROFILE_TITLE'); ?>: #<?php echo $this->profileid; ?>
 			</label>
@@ -142,12 +142,19 @@ JFactory::getDocument()->addScriptDeclaration($script,'text/javascript');
 		</div>
 		
 		<div class="icon">
+			<?php if(version_compare(JVERSION, '3.0', 'lt')): ?>
 			<a href="index.php?option=com_config&view=component&component=com_akeeba&path=&tmpl=component"
 				class="modal"
 				rel="{handler: 'iframe', size: {x: 660, y: 500}}">
 				<div class="ak-icon ak-icon-componentparams">&nbsp;</div>
 				<span><?php echo JText::_('CPANEL_LABEL_COMPONENTCONFIG'); ?></span>
 			</a>
+			<?php else: ?>
+			<a href="index.php?option=com_config&view=component&component=com_akeeba&path=&return=<?php echo base64_encode(JURI::getInstance()->toString()) ?>">
+				<div class="ak-icon ak-icon-componentparams">&nbsp;</div>
+				<span><?php echo JText::_('CPANEL_LABEL_COMPONENTCONFIG'); ?></span>
+			</a>
+			<?php endif; ?>
 		</div>
 
 		<?php echo LiveUpdate::getIcon(); ?>

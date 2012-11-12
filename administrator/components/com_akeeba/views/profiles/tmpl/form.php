@@ -30,7 +30,7 @@ else
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="task" id="task" value="" />
 	<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
-	<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 	
 	<div class="control-group">
 		<label class="control-label" for="description">

@@ -67,6 +67,7 @@ div.akeeba-bootstrap ul.nav-tabs li { list-style: none }
 
 .akeeba-bootstrap .cpanel div.icon a,
 .akeeba-bootstrap #cpanel div.icon a {
+	padding: 7px 5px 5px;
 	background-color: white;
 	background-position: -30px;
 	display: block;

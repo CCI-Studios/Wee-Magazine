@@ -97,11 +97,14 @@ class FOFDispatcher extends JObject
 
 		$className = ucfirst(str_replace('com_', '', $config['option'])).'Dispatcher';
 		if (!class_exists( $className )) {
-			$app = JFactory::getApplication();
-			if($app->isSite()) {
-				$basePath = JPATH_SITE;
-			} else {
+			list($isCli, $isAdmin) = self::isCliAdmin();
+			
+			if($isAdmin) {
 				$basePath = JPATH_ADMINISTRATOR;
+			} elseif($isCli) {
+				$basePath = JPATH_ROOT;
+			} else {
+				$basePath = JPATH_SITE;
 			}
 
 			$searchPaths = array(
@@ -291,6 +294,9 @@ class FOFDispatcher extends JObject
 		}
 
 		// Check the request method
+		if(!array_key_exists('REQUEST_METHOD', $_SERVER)) {
+			$_SERVER['REQUEST_METHOD'] = 'GET';
+		}
 		$requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 		switch($requestMethod) {
 			case 'POST':
@@ -304,11 +310,12 @@ class FOFDispatcher extends JObject
 
 			case 'GET':
 			default:
+				list($isCli, $isAdmin) = self::isCliAdmin();
 				// If it's an edit without an ID or ID=0, it's really an add
 				if(($task == 'edit') && ($id == 0)) {
 					$task = 'add';
 				// If it's an edit in the frontend, it's really a read
-				} elseif(($task == 'edit') && JFactory::getApplication()->isSite()) {
+				} elseif(($task == 'edit') && !$isCli && !$isAdmin) {
 					$task = 'read';
 				}
 				break;
@@ -402,7 +409,7 @@ class FOFDispatcher extends JObject
 					$authInfo = json_decode($jsonencoded, true);
 					if(!is_array($authInfo)) {
 						$authInfo = null;
-					} elseif(!in_array('username', $authInfo) || !in_array('password', $authInfo)) {
+					} elseif(!array_key_exists('username', $authInfo) || !array_key_exists('password', $authInfo)) {
 						$authInfo = null;
 					}
 					break;

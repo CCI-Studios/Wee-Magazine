@@ -111,6 +111,8 @@ class AEDriverMysqli extends AEDriverMysql
 		if ($this->selectDatabase && !empty($this->_database)) {
 			$this->select($this->_database);
 		}
+		
+		$this->setUTF();
 	}
 
 	public function close()

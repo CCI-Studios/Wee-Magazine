@@ -11,14 +11,14 @@ defined('_JEXEC') or die();
 JHtml::_('behavior.framework');
 
 $configurl = base64_encode(JURI::base().'index.php?option=com_akeeba&view=config');
-$token = JFactory::getSession()->getToken();
+$token = JFactory::getSession()->getFormToken();
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeeba" />
 	<input type="hidden" name="view" value="profiles" />
 	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 	<input type="hidden" name="task" id="task" value="" />
-	<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
 	
 	<div class="alert alert-info">
 		<strong><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?></strong>:
@@ -45,13 +45,20 @@ $token = JFactory::getSession()->getToken();
 		$id = JHTML::_('grid.id', ++$i, $profile->id);
 		$link = 'index.php?option=com_akeeba&amp;view=profiles&amp;task=edit&amp;id='.$profile->id;
 		$i = 1 - $i;
+		$exportBaseName = FOFStringUtils::toSlug($profile->description);
 		?>
 			<tr class="row<?php echo $i; ?>">
 				<td><?php echo $id; ?></td>
 				<td><?php echo $profile->id ?></td>
 				<td>
-					<button class="btn btn-mini" onclick="window.location='index.php?option=com_akeeba&task=switchprofile&profileid=<?php echo $profile->id ?>&returnurl=<?php echo $configurl ?>&<?php echo $token ?>=1'; return false;">
+					<button class="btn btn-mini btn-primary" onclick="window.location='index.php?option=com_akeeba&task=switchprofile&profileid=<?php echo $profile->id ?>&returnurl=<?php echo $configurl ?>&<?php echo $token ?>=1'; return false;">
+						<i class="icon-cog icon-white"></i>
 						<?php echo JText::_('CONFIG_UI_CONFIG'); ?>
+					</button>
+					&nbsp;
+					<button class="btn btn-mini" onclick="window.location='index.php?option=com_akeeba&view=profile&task=read&id=<?php echo $profile->id ?>&basename=<?php echo $exportBaseName?>&format=json&<?php echo $token ?>=1'; return false;">
+						<i class="icon-download"></i>
+						<?php echo JText::_('COM_AKEEBA_PROFILES_BTN_EXPORT'); ?>
 					</button>
 					&nbsp;
 					<a href="<?php echo $link; ?>">
@@ -62,4 +69,21 @@ $token = JFactory::getSession()->getToken();
 		<?php endforeach; ?>
 		</tbody>
 	</table>
+</form>
+
+<form action="index.php" method="post" name="importForm" enctype="multipart/form-data" id="importForm" class="form form-inline well">
+	<input type="hidden" name="option" value="com_akeeba" />
+	<input type="hidden" name="view" value="profiles" />
+	<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
+	<input type="hidden" name="task" id="task" value="import" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
+
+	<input type="file" name="importfile" class="input-medium" />
+	<button class="btn btn-success">
+		<i class="icon-upload icon-white"></i>
+		<?php echo JText::_('COM_AKEEBA_PROFILES_HEADER_IMPORT');?>
+	</button>
+	<span class="help-inline">
+		<?php echo JText::_('COM_AKEEBA_PROFILES_LBL_IMPORT_HELP');?>
+	</span>
 </form>

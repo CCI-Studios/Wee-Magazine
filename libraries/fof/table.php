@@ -157,7 +157,7 @@ abstract class FOFTable_COMMONBASE extends JTable
 			foreach ($fields as $name => $v)
 			{
 				// Add the field if it is not already present.
-				if (!property_exists($this, $name)) {
+				if (!isset($this->$name)) {
 					$this->$name = null;
 				}
 			}
@@ -165,13 +165,13 @@ abstract class FOFTable_COMMONBASE extends JTable
 
 		if(version_compare(JVERSION, '1.6.0', 'ge')) {
 			// If we are tracking assets, make sure an access field exists and initially set the default.
-			if (property_exists($this, 'asset_id')) {
+			if (isset($this->asset_id) || property_exists($this, 'asset_id')) {
 				jimport('joomla.access.rules');
 				$this->_trackAssets = true;
 			}
 
 			// If the acess property exists, set the default.
-			if (property_exists($this, 'access')) {
+			if (isset($this->access) ||property_exists($this, 'access')) {
 				$this->access = (int) JFactory::getConfig()->get('access');
 			}
 		}
@@ -529,6 +529,61 @@ abstract class FOFTable_COMMONBASE extends JTable
 		return $session->exists($against);
 	}
 
+	public function copy($cid = null)
+	{
+		JArrayHelper::toInteger( $cid );
+		$user_id	= (int) $user_id;
+		$k			= $this->_tbl_key;
+
+		if(count($cid) < 1)
+		{
+			if($this->$k) {
+				$cid = array($this->$k);
+			} else {
+				$this->setError("No items selected.");
+				return false;
+			}
+		}
+
+		$created_by		= $this->getColumnAlias('created_by');
+		$created_on		= $this->getColumnAlias('created_on');
+		$modified_by	= $this->getColumnAlias('modified_by');
+		$modified_on	= $this->getColumnAlias('modified_on');
+
+		$locked_byName	= $this->getColumnAlias('locked_by');
+		$checkin 		= in_array( $locked_byName, array_keys($this->getProperties()) );
+
+		foreach ($cid as $item)
+		{
+			// Prevent load with id = 0
+			if(!$item) continue;
+
+			$this->load($item);
+
+			if ($checkin){
+				// We're using the checkin and the record is used by someone else
+				if(!$this->isCheckedOut($item)) continue;
+			}
+
+			if(!$this->onBeforeCopy($item)) continue;
+
+			$this->$k 			= null;
+			$this->$created_by 	= null;
+			$this->$created_on 	= null;
+			$this->$modified_on	= null;
+			$this->$modified_by = null;
+
+			// Let's fire the event only if everything is ok
+			if($this->store()){
+				$this->onAfterCopy($item);
+			}
+
+			$this->reset();
+		}
+
+		return true;
+	}
+
 	function publish( $cid=null, $publish=1, $user_id=0 )
 	{
 		JArrayHelper::toInteger( $cid );
@@ -847,9 +902,17 @@ abstract class FOFTable_COMMONBASE extends JTable
 		$title			= $this->getColumnAlias('title');
 		$slug			= $this->getColumnAlias('slug');
 
-		if(property_exists($this, $created_on) && property_exists($this, $created_by)) {
+		$hasCreatedOn = isset($this->$created_on) || property_exists($this, $created_on);
+		$hasCreatedBy = isset($this->$created_by) || property_exists($this, $created_by);
+		
+		if($hasCreatedOn && $hasCreatedBy) {
+			$hasModifiedOn = isset($this->$modified_on) || property_exists($this, $modified_on);
+			$hasModifiedBy = isset($this->$modified_by) || property_exists($this, $modified_by);
 			if(empty($this->$created_by) || ($this->$created_on == '0000-00-00 00:00:00') || empty($this->$created_on)) {
-				$this->$created_by = JFactory::getUser()->id;
+				$uid = JFactory::getUser()->id;
+				if($uid) {
+					$this->$created_by = JFactory::getUser()->id;
+				}
 				jimport('joomla.utilities.date');
 				$date = new JDate();
 				if(version_compare(JVERSION, '3.0', 'ge')) {
@@ -857,8 +920,11 @@ abstract class FOFTable_COMMONBASE extends JTable
 				} else {
 					$this->$created_on = $date->toMysql();
 				}
-			} elseif(property_exists($this, $modified_on) && property_exists($this, $modified_by)) {
-				$this->$modified_by = JFactory::getUser()->id;
+			} elseif($hasModifiedOn && $hasModifiedBy) {
+				$uid = JFactory::getUser()->id;
+				if($uid) {
+					$this->$modified_by = JFactory::getUser()->id;
+				}
 				jimport('joomla.utilities.date');
 				$date = new JDate();
 				if(version_compare(JVERSION, '3.0', 'ge')) {
@@ -870,7 +936,9 @@ abstract class FOFTable_COMMONBASE extends JTable
 		}
 
 		// Do we have a set of title and slug fields?
-		if(property_exists($this, $title) && property_exists($this, $slug)) {
+		$hasTitle = isset($this->$title) || property_exists($this, $title);
+		$hasSlug = isset($this->$slug) || property_exists($this, $slug);
+		if($hasTitle && $hasSlug) {
 			if(empty($this->$slug)) {
 				// Create a slug from the title
 				$this->$slug = FOFStringUtils::toSlug($this->$title);
@@ -1101,6 +1169,42 @@ abstract class FOFTable_COMMONBASE extends JTable
 
 			$dispatcher = JDispatcher::getInstance();
 			$result = $dispatcher->trigger( 'onAfterHit'.ucfirst($name), array( &$this, $oid ) );
+
+			if(in_array(false, $result, true)){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		return true;
+	}
+
+	protected function onBeforeCopy($oid)
+	{
+		if($this->_trigger_events){
+			$name = FOFInflector::pluralize($this->getKeyName());
+
+			$dispatcher = JDispatcher::getInstance();
+			$result = $dispatcher->trigger( 'onBeforeCopy'.ucfirst($name), array( &$this, $oid ) );
+
+			if(in_array(false, $result, true)){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		return true;
+	}
+
+	protected function onAfterCopy($oid)
+	{
+		if($this->_trigger_events){
+			$name = FOFInflector::pluralize($this->getKeyName());
+
+			$dispatcher = JDispatcher::getInstance();
+			$result = $dispatcher->trigger( 'onAfterCopy'.ucfirst($name), array( &$this, $oid ) );
 
 			if(in_array(false, $result, true)){
 				return false;

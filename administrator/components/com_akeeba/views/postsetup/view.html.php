@@ -104,9 +104,13 @@ class AkeebaViewPostsetup extends FOFViewHtml
 		}
 		
 		$minStability = $params->get( 'minstability', 'stable' );
+		$acceptlicense = $params->get( 'acceptlicense', '0' );
+		$acceptsupport = $params->get( 'acceptsupport', '0' );
 		
 		$this->assign('enableconfwiz', $enableconfwiz);
 		$this->assign('minstability', $minStability);
+		$this->assign('acceptlicense', $acceptlicense);
+		$this->assign('acceptsupport', $acceptsupport);
 		return $enableconfwiz;
 	}
 	
