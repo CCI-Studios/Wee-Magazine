@@ -5,17 +5,26 @@
 img.left { margin: 0 10px 10px 0; }
 img.right { margin: 0 0 10px 10px; }
 img.shadowed {
-	border: 1px solid #e9e9e9;
-	box-shadow: -5px 5px 10px #ddd;
-	border-radius: 3px;
-	
-	behavior: url(templates/wee_magazine/css/PIE.htc);
+  border: 1px solid #e9e9e9;
+  box-shadow: -5px 5px 10px #ddd;
+  border-radius: 3px;
+  
+  behavior: url(templates/wee_magazine/css/PIE.htc);
 }
 
 .important {
-	color: #ab95ba;
+  color: #ab95ba;
 }
 
 .blue {
-	color: #93b1ce;
+  color: #93b1ce;
+}
+
+.directory > div {
+  /*float: left;
+  width: 50%; */
+}
+
+.directory > h2 {
+  clear: both;
 }
