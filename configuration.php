@@ -68,5 +68,9 @@ class JConfig {
 		$this->user = getenv('MYSQL_USERNAME');
 		$this->password = getenv('MYSQL_PASSWORD');
 		$this->db = getenv('MYSQL_DB_NAME');
+
+		$this->log_path = dirname(__FILE__) . '/log';
+		$this->tmp_path = dirname(__FILE__) . '/tmp';
+		$this->secret = getenv('JOOMLA_SECRET');
 	}
 }
